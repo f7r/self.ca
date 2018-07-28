@@ -10,11 +10,12 @@ from datetime import datetime, timedelta
 
 class CABuilder(object):
 
-    def __init__(self, subject_name, extensions=[], valid_days=365*3):
+    def __init__(self, subject_name, extensions={}, valid_days=365*3):
         self.subject_name = subject_name
-        self.extensions.extend(extensions)
         self.valid_days = valid_days
         self.issuer_name = self.subject_name
+        self.default_extensions.update(extensions)
+        self.extensions = self.default_extensions.values()
         self.attr = self.get_attr()
 
     def get_attr(self):
@@ -62,28 +63,28 @@ class CABuilder(object):
             "decipher_only": False,
     }
 
-    extensions = [
-            Extension(
+    default_extensions = {
+            "keyUsage": Extension(
                     ExtensionOID.KEY_USAGE,
                     True,
                     x509.KeyUsage(**default_keyusage),
             ),
-            Extension(
+            "basicConstraints": Extension(
                     ExtensionOID.BASIC_CONSTRAINTS,
                     True,
                     x509.BasicConstraints(ca=True, path_length=None),
             ),
-            Extension(
+            "subjectKeyIdentifier": Extension(
                     ExtensionOID.SUBJECT_KEY_IDENTIFIER,
                     False,
                     x509.SubjectKeyIdentifier.from_public_key(public_key),
             ),
-            Extension(
+            "authorityKeyIdentifier": Extension(
                     ExtensionOID.AUTHORITY_KEY_IDENTIFIER,
                     False,
                     x509.AuthorityKeyIdentifier.from_issuer_public_key(public_key),
             ),
-    ]
+    }
 
 
 class CAPack(object):

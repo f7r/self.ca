@@ -8,8 +8,6 @@ if __name__ == "__main__":
     ca_attr = {
               "commonName": "self.ca",
               "countryName": "CN",
-              "organizationName": "SkyGuard",
-              "organizationalUnitName": "ITP",
               "E": "zmj@falseuser.cn"
     }
     ca_subject_name = get_subject_name(ca_attr)
