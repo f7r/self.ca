@@ -82,7 +82,9 @@ class CABuilder(object):
             "authorityKeyIdentifier": Extension(
                     ExtensionOID.AUTHORITY_KEY_IDENTIFIER,
                     False,
-                    x509.AuthorityKeyIdentifier.from_issuer_public_key(public_key),
+                    x509.AuthorityKeyIdentifier.from_issuer_public_key(
+                            public_key
+                    ),
             ),
     }
 

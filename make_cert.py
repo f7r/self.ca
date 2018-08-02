@@ -15,14 +15,16 @@ if __name__ == "__main__":
     ca_pack = ca_builder.build_ca()
 
     with open("CA.key", "wb") as f:
-        f.write(ca_pack.private_key.private_bytes(
-                serialization.Encoding.PEM,
-                serialization.PrivateFormat.TraditionalOpenSSL,
-                serialization.NoEncryption()),
+        f.write(
+                ca_pack.private_key.private_bytes(
+                        serialization.Encoding.PEM,
+                        serialization.PrivateFormat.TraditionalOpenSSL,
+                        serialization.NoEncryption()
+                )
         )
     with open("CA.pem", "wb") as f:
         f.write(ca_pack.cert.public_bytes(serialization.Encoding.PEM))
-    #c1 = CA.load_from_file("CA.key", None, "CA.pem")
+    # c1 = CA.load_from_file("CA.key", None, "CA.pem")
 
     cert_attr = {
             "CN": "api.falseuser.cn",
@@ -33,10 +35,12 @@ if __name__ == "__main__":
     csr_builder = CSRBuilder(cert_subject_name)
     csr_pack = csr_builder.build_csr()
     with open("csr.key", "wb") as f:
-        f.write(csr_pack.private_key.private_bytes(
-                serialization.Encoding.PEM,
-                serialization.PrivateFormat.TraditionalOpenSSL,
-                serialization.NoEncryption()),
+        f.write(
+                csr_pack.private_key.private_bytes(
+                        serialization.Encoding.PEM,
+                        serialization.PrivateFormat.TraditionalOpenSSL,
+                        serialization.NoEncryption()
+                )
         )
     cert = ca_pack.sign(csr_pack.csr, 365)
     with open("cert.crt", "wb") as f:

@@ -1,5 +1,6 @@
 from cryptography import x509
 from cryptography.x509.oid import NameOID, ExtensionOID
+from cryptography.x509.extensions import Extension
 
 
 ATTR_NAMES = {
@@ -19,8 +20,9 @@ ATTR_NAMES = {
         "E": NameOID.EMAIL_ADDRESS,
 }
 
+
 def get_subject_name(names):
-    subject = [] 
+    subject = []
     for k in names:
         if k in ATTR_NAMES:
             name_attr = x509.NameAttribute(ATTR_NAMES[k], names[k])
@@ -44,9 +46,11 @@ def get_extension_keyusage(ext_attr):
             keyusage[k] = False
     return Extension(ExtensionOID.KEY_USAGE, True, x509.KeyUsage(**keyusage))
 
+
 EXTENSION_NAMES = {
         "keyUsage": get_extension_keyusage,
 }
+
 
 def get_extensions(ext_names):
     extensions = {}
