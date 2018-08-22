@@ -4,20 +4,20 @@ from cryptography.x509.extensions import Extension
 
 
 ATTR_NAMES = {
-        "commonName": NameOID.COMMON_NAME,
-        "CN": NameOID.COMMON_NAME,
-        "countryName": NameOID.COUNTRY_NAME,
-        "C": NameOID.COUNTRY_NAME,
-        "localityName": NameOID.LOCALITY_NAME,
-        "L": NameOID.LOCALITY_NAME,
-        "stateOrProvinceName": NameOID.STATE_OR_PROVINCE_NAME,
-        "ST": NameOID.STATE_OR_PROVINCE_NAME,
-        "organizationName": NameOID.ORGANIZATION_NAME,
-        "O": NameOID.ORGANIZATION_NAME,
-        "organizationalUnitName": NameOID.ORGANIZATIONAL_UNIT_NAME,
-        "OU": NameOID.ORGANIZATIONAL_UNIT_NAME,
-        "emailAddress": NameOID.EMAIL_ADDRESS,
-        "E": NameOID.EMAIL_ADDRESS,
+    "commonName": NameOID.COMMON_NAME,
+    "CN": NameOID.COMMON_NAME,
+    "countryName": NameOID.COUNTRY_NAME,
+    "C": NameOID.COUNTRY_NAME,
+    "localityName": NameOID.LOCALITY_NAME,
+    "L": NameOID.LOCALITY_NAME,
+    "stateOrProvinceName": NameOID.STATE_OR_PROVINCE_NAME,
+    "ST": NameOID.STATE_OR_PROVINCE_NAME,
+    "organizationName": NameOID.ORGANIZATION_NAME,
+    "O": NameOID.ORGANIZATION_NAME,
+    "organizationalUnitName": NameOID.ORGANIZATIONAL_UNIT_NAME,
+    "OU": NameOID.ORGANIZATIONAL_UNIT_NAME,
+    "emailAddress": NameOID.EMAIL_ADDRESS,
+    "E": NameOID.EMAIL_ADDRESS,
 }
 
 
@@ -34,9 +34,9 @@ def get_subject_name(names):
 # Extensions
 def get_extension_keyusage(ext_attr):
     all_keyusage = [
-                "digital_signature", "content_commitment", "key_encipherment",
-                "data_encipherment", "key_agreement", "key_cert_sign",
-                "crl_sign", "encipher_only", "decipher_only",
+        "digital_signature", "content_commitment", "key_encipherment",
+        "data_encipherment", "key_agreement", "key_cert_sign",
+        "crl_sign", "encipher_only", "decipher_only",
     ]
     keyusage = {}
     for k in all_keyusage:
@@ -48,7 +48,7 @@ def get_extension_keyusage(ext_attr):
 
 
 EXTENSION_NAMES = {
-        "keyUsage": get_extension_keyusage,
+    "keyUsage": get_extension_keyusage,
 }
 
 
