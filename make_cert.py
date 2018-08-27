@@ -2,53 +2,53 @@
 """
 Use to create a CA and cert.
 """
+from cryptography import x509
 from cryptography.hazmat.primitives import serialization
-from ca import CABuilder
+from cryptography.hazmat.backends import default_backend
+from ca import CASigner
 from csr import CSRBuilder
 from utils import get_subject_name
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 
 def main():
-    """main function."""
-
-    ca_attr = {
-        "commonName": "self.ca",
-        "countryName": "CN",
-        "E": "zmj@falseuser.cn"
-    }
-    ca_subject_name = get_subject_name(ca_attr)
-    ca_builder = CABuilder(ca_subject_name, valid_days=365)
-    ca_pack = ca_builder.build_ca()
-
-    with open("CA.key", "wb") as f:
-        f.write(
-            ca_pack.private_key.private_bytes(
-                serialization.Encoding.PEM,
-                serialization.PrivateFormat.TraditionalOpenSSL,
-                serialization.NoEncryption(),
-            )
-        )
-    with open("CA.pem", "wb") as f:
-        f.write(ca_pack.cert.public_bytes(serialization.Encoding.PEM))
-    # c1 = CA.load_from_file("CA.key", None, "CA.pem")
-
     cert_attr = {
         "CN": "api.falseuser.cn",
         "C": "CN",
         "E": "zmj@falseuser.cn",
     }
     cert_subject_name = get_subject_name(cert_attr)
-    csr_builder = CSRBuilder(cert_subject_name)
-    csr_pack = csr_builder.build_csr()
-    with open("csr.key", "wb") as f:
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048,
+        backend=default_backend(),
+    )
+    csr_builder = CSRBuilder(private_key, cert_subject_name)
+    csr = csr_builder.build_csr()
+    with open("private.key", "wb") as f:
         f.write(
-            csr_pack.private_key.private_bytes(
+            private_key.private_bytes(
                 serialization.Encoding.PEM,
                 serialization.PrivateFormat.TraditionalOpenSSL,
                 serialization.NoEncryption()
             )
         )
-    cert = ca_pack.sign(csr_pack.csr, 365)
+    password = None
+    with open("CA.key", "rb") as f:
+        ca_key_data = f.read()
+        ca_key = serialization.load_pem_private_key(
+            ca_key_data,
+            password,
+            default_backend(),
+        )
+    with open("CA.pem", "rb") as f:
+        ca_cert_data = f.read()
+        ca_cert = x509.load_pem_x509_certificate(
+            ca_cert_data,
+            default_backend(),
+        )
+    signer = CASigner(ca_key, ca_cert.subject)
+    cert = signer.sign(csr, 365)
     with open("cert.crt", "wb") as f:
         f.write(cert.public_bytes(serialization.Encoding.PEM))
 
